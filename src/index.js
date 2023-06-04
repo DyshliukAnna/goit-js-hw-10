@@ -1,4 +1,4 @@
-const BASE_URL = 'https://api.thecatapi.com/v1';
+import scss from './sass/index.scss';
 const API_KEY =
   'live_YQPtgQjxNvntrxfOyZ3N1MnSlZixBwThs5vJDplQB1hkUEVNvIS1L7Eq7M1b054J';
 
@@ -22,6 +22,9 @@ const refs = {
 //   return response.json();
 // });
 
+// refs.loader.classList.add('visually-hidden');
+refs.select.classList.add('visually-hidden');
+refs.catInfo.classList.add('visually-hidden');
 fetchBreeds();
 
 function fetchBreeds() {
@@ -29,8 +32,14 @@ function fetchBreeds() {
     .then(response => {
       return response.json();
     })
-    .then(renderCard)
+    .then(breeds => {
+      refs.loader.classList.add('visually-hidden');
+      refs.select.classList.remove('visually-hidden');
+      renderCard(breeds);
+    })
     .catch(error => {
+      refs.error.classList.remove('visually-hidden');
+      refs.select.classList.add('visually-hidden');
       console.log(error);
     });
 }
@@ -41,6 +50,7 @@ function renderCard(breeds) {
       return `<option value="${id}" class="option-js">${name}</option>`;
     })
     .join('');
+  // refs.loader.classList.remove('visually-hidden');
 }
 
 function fetchCatByBreed(breedId) {
@@ -48,10 +58,16 @@ function fetchCatByBreed(breedId) {
     `https://api.thecatapi.com/v1/images/search?api_key=${API_KEY}&breed_ids=${breedId}`
   )
     .then(response => {
+      // refs.loader.classList.remove('visually-hidden');
       return response.json();
     })
-    .then(renderInfo)
+    .then(breeds => {
+      renderInfo(breeds);
+      refs.catInfo.classList.remove('visually-hidden');
+      refs.loader.classList.add('visually-hidden');
+    })
     .catch(error => {
+      refs.error.classList.remove('visually-hidden');
       console.log(error);
     });
 }
@@ -68,6 +84,8 @@ function renderInfo(breeds) {
 refs.select.addEventListener('change', onSelectChange);
 function onSelectChange(e) {
   const breedId = e.target.value;
+  refs.loader.classList.remove('visually-hidden');
+  refs.catInfo.classList.add('visually-hidden');
   fetchCatByBreed(breedId);
 }
 
