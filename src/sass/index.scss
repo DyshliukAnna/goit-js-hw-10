@@ -1,6 +1,46 @@
+
 @import './common';
 @import './example';
 
 .visually-hidden {
 display: none;
+}
+.container {
+    background-color: #c9f483;
+    padding: 20px;
+    font-size: 16px;
+    color:black;
+}
+
+.cat-info {
+    margin-top: 20px;
+    display: flex;
+    width: 900px;
+    height: auto;
+    background-color: #fff;
+
+}
+
+.wrapper {
+    padding: 20px 20px;
+    width: auto;
+}
+
+.title {
+    color: #c9f483;
+}
+.accent {
+    font-weight: 500;
+    color:#c9f483;
+}
+
+.error {
+    font-weight: 500;
+    color: red;
+}
+
+.loader {
+    font-weight: 500;
+    color: rgb(177, 117, 117);
+   
 }
