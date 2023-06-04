@@ -1,5 +1,6 @@
 import scss from './sass/index.scss';
 import { fetchBreeds, fetchCatByBreed } from './cat-api';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 const API_KEY =
   'live_YQPtgQjxNvntrxfOyZ3N1MnSlZixBwThs5vJDplQB1hkUEVNvIS1L7Eq7M1b054J';
 
@@ -24,6 +25,7 @@ fetchBreeds()
   .catch(error => {
     refs.error.classList.remove('visually-hidden');
     refs.select.classList.add('visually-hidden');
+    Notify.failure('Oops! Something went wrong! Try reloading the page!');
   })
   .finally(() => refs.loader.classList.add('visually-hidden'));
 
@@ -38,7 +40,7 @@ export function renderCard(breeds) {
 export function renderInfo(breeds) {
   refs.catInfo.innerHTML = breeds
     .map(({ url, breeds }) => {
-      return `<img src="${url}" width='350' hight='auto'><div class="wrapper"><h2 class="title">${breeds[0].name}</h2><p class="description">${breeds[0].description}</p>
+      return `<img src="${url}" width='350'><div class="wrapper"><h2 class="title">${breeds[0].name}</h2><p class="description">${breeds[0].description}</p>
      <span class = "accent">Temperament:</span>  <p> ${breeds[0].temperament}</p></div>`;
     })
     .join('');
@@ -57,6 +59,7 @@ function onSelectChange(e) {
     })
     .catch(error => {
       refs.error.classList.remove('visually-hidden');
+      Notify.failure('Oops! Something went wrong! Try reloading the page!');
     })
     .finally(() => refs.loader.classList.add('visually-hidden'));
 }
