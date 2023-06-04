@@ -1,11 +1,11 @@
 import scss from './sass/index.scss';
 import { fetchBreeds, fetchCatByBreed } from './cat-api';
+import SlimSelect from 'slim-select';
+import 'slim-select/dist/slimselect.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-const API_KEY =
-  'live_YQPtgQjxNvntrxfOyZ3N1MnSlZixBwThs5vJDplQB1hkUEVNvIS1L7Eq7M1b054J';
 
 export const refs = {
-  select: document.querySelector('.breed-select'),
+  select: document.querySelector('#single'),
   option: document.querySelector('.option-js'),
   loader: document.querySelector('.loader'),
   error: document.querySelector('.error'),
@@ -14,13 +14,10 @@ export const refs = {
 
 refs.select.addEventListener('change', onSelectChange);
 
-refs.select.classList.add('visually-hidden');
-refs.catInfo.classList.add('visually-hidden');
-
 fetchBreeds()
   .then(breeds => {
-    refs.select.classList.remove('visually-hidden');
     renderCard(breeds);
+    refs.select.classList.remove('visually-hidden');
   })
   .catch(error => {
     refs.error.classList.remove('visually-hidden');
@@ -29,15 +26,18 @@ fetchBreeds()
   })
   .finally(() => refs.loader.classList.add('visually-hidden'));
 
-export function renderCard(breeds) {
+function renderCard(breeds) {
   refs.select.innerHTML = breeds
     .map(({ id, name }) => {
       return `<option value="${id}" class="option-js">${name}</option>`;
     })
     .join('');
+  new SlimSelect({
+    select: '#single',
+  });
 }
 
-export function renderInfo(breeds) {
+function renderInfo(breeds) {
   refs.catInfo.innerHTML = breeds
     .map(({ url, breeds }) => {
       return `<img src="${url}" width='350'><div class="wrapper"><h2 class="title">${breeds[0].name}</h2><p class="description">${breeds[0].description}</p>
@@ -49,8 +49,7 @@ export function renderInfo(breeds) {
 function onSelectChange(e) {
   const breedId = e.target.value;
   refs.loader.classList.remove('visually-hidden');
-  refs.catInfo.classList.add('visually-hidden');
-  fetchCatByBreed(breedId);
+  refs.catInfo.innerHTML = '';
 
   fetchCatByBreed(breedId)
     .then(breeds => {
@@ -59,7 +58,6 @@ function onSelectChange(e) {
     })
     .catch(error => {
       refs.error.classList.remove('visually-hidden');
-      Notify.failure('Oops! Something went wrong! Try reloading the page!');
     })
     .finally(() => refs.loader.classList.add('visually-hidden'));
 }

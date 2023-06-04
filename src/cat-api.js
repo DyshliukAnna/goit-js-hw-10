@@ -1,6 +1,3 @@
-import scss from './sass/index.scss';
-import { renderCard, renderInfo } from './index.js';
-import { refs } from './index';
 const BASE_URL = 'https://api.thecatapi.com/v1';
 const API_KEY =
   'live_Yev63kKIKQlvuwfV91tmMhA4RcWdQRKBtpQEc40LBA3Gqtc0uo9ZdRzJSAOtGlda';
